@@ -20,16 +20,24 @@ func (handler *userHandler) RegisterUser(context *gin.Context) {
 	var input user.RegisterUserInput
 
 	err := context.ShouldBindJSON(&input)
-	if err != nil {
-		response := helper.APIResponse("Register Account Failed", http.StatusOK, "error", nil)
-		context.JSON(http.StatusBadRequest, response)
+	if true {
+		errors := helper.FormatValidationError(err)
+
+		errorMsg := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Register Account Failed", http.StatusOK, "error", errorMsg)
+		context.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
 
 	newUser, err := handler.userService.RegisterUser(input)
 	if err != nil {
-		response := helper.APIResponse("Register Account Failed", http.StatusOK, "error", nil)
-		context.JSON(http.StatusBadRequest, response)
+		errors := helper.FormatValidationError(err)
+
+		errorMsg := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Register Account Failed", http.StatusOK, "error", errorMsg)
+		context.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
 
