@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bwaproject/auth"
 	"bwaproject/handler"
 	"bwaproject/user"
 	"fmt"
@@ -21,7 +22,9 @@ func main() {
 
 	userRepository := user.NewRepository(db)
 	userService := user.NewService(userRepository)
-	userHandler := handler.NewUserHandler(userService)
+	authService := auth.NewService()
+	userHandler := handler.NewUserHandler(userService, authService)
+	
 
 	router := gin.Default()
 
@@ -33,7 +36,7 @@ func main() {
 		api.POST("/avatars",userHandler.UploadAvatar)
 	}
 
-	err = router.Run()
+	err = router.Run(":8080")
 
 	if err != nil {
 		fmt.Println("Error while running server", err.Error())
