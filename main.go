@@ -3,6 +3,7 @@ package main
 import (
 	"bwaproject/handler"
 	"bwaproject/user"
+	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -29,7 +30,13 @@ func main() {
 		api.POST("/users", userHandler.RegisterUser)
 		api.POST("/sessions", userHandler.Login)
 		api.POST("/email_checkers",userHandler.CheckEmailAvailability)
+		api.POST("/avatars",userHandler.UploadAvatar)
 	}
 
-	router.Run()
+	err = router.Run()
+
+	if err != nil {
+		fmt.Println("Error while running server", err.Error())
+	}
+
 }
